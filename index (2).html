@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CasAroma | Haute Parfumerie & Management</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Montserrat:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            black: '#0a0a0a',
+                            cream: '#f9f8f6',
+                            muted: '#8e8e8e',
+                            border: '#e5e3df',
+                            card: '#141414',
+                            surface: '#f2f0ec'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['"Cormorant Garamond"', 'serif'],
+                        sans: ['"Montserrat"', 'sans-serif'],
+                    },
+                    letterSpacing: {
+                        superwide: '0.25em',
+                        ultra: '0.35em'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #0a0a0a;
+            color: #f9f8f6;
+            font-family: 'Montserrat', sans-serif;
+            overflow-x: hidden;
+        }
+        .serif-title {
+            font-family: 'Cormorant Garamond', serif;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #0a0a0a;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 2px;
+        }
+        .glass-panel {
+            background: rgba(20, 20, 20, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(229, 227, 223, 0.12);
+        }
+        .glass-panel-light {
+            background: rgba(249, 248, 246, 0.95);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(10, 10, 10, 0.08);
+        }
+        .img-zoom-container {
+            overflow: hidden;
+        }
+        .img-zoom-container img {
+            transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .img-zoom-container:hover img {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body class="selection:bg-brand-cream selection:text-brand-black relative">
+
+    <header class="fixed top-0 left-0 w-full z-50 transition-all duration-300 border-b border-white/10 glass-panel" id="mainHeader">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12 h-20 flex items-center justify-between">
+            <!-- Brand Logo -->
+            <a href="#" class="flex flex-col group">
+                <span class="serif-title text-2xl tracking-[0.25em] font-light text-brand-cream group-hover:text-white transition-colors">CASAROMA</span>
+                <span class="text-[8px] uppercase tracking-[0.3em] text-brand-muted -mt-1">Cartago • Haute Parfumerie</span>
+            </a>
+
+            <!-- Desktop Nav Links -->
+            <nav class="hidden md:flex items-center space-x-10 text-xs tracking-superwide uppercase text-brand-cream/80 font-light">
+                <a href="#asesoria" class="hover:text-white transition-colors py-1 relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1px] after:bg-white hover:after:w-full after:transition-all">Asesoría</a>
+                <a href="#administracion" class="hover:text-white transition-colors py-1 relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1px] after:bg-white hover:after:w-full after:transition-all">Gestión de Perfumerías</a>
+                <a href="#servicios" class="hover:text-white transition-colors py-1 relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1px] after:bg-white hover:after:w-full after:transition-all">Servicios</a>
+                <a href="#ubicacion" class="hover:text-white transition-colors py-1 relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1px] after:bg-white hover:after:w-full after:transition-all">Ubicación</a>
+            </nav>
+
+            <!-- Actions & Region -->
+            <div class="hidden lg:flex items-center space-x-6">
+                <span class="text-[10px] tracking-widest text-brand-muted border border-white/10 px-2.5 py-1 rounded-full uppercase">COP $ • Cartago, CL</span>
+                <button onclick="openBookingModal('General')" class="text-xs uppercase tracking-widest px-5 py-2.5 bg-brand-cream text-brand-black hover:bg-white transition-all font-medium rounded-none">
+                    Reservar Cita
+                </button>
+            </div>
+
+            <!-- Mobile Menu Toggle -->
+            <button class="md:hidden text-brand-cream p-2" id="mobileMenuBtn" onclick="toggleMobileMenu()">
+                <i data-lucide="menu" class="w-6 h-6"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Drawer -->
+        <div id="mobileMenu" class="hidden md:hidden bg-brand-black border-b border-brand-border/20 px-6 py-8 space-y-6">
+            <a href="#asesoria" onclick="toggleMobileMenu()" class="block text-sm uppercase tracking-widest text-brand-cream/90">Asesoría de Perfume</a>
+            <a href="#administracion" onclick="toggleMobileMenu()" class="block text-sm uppercase tracking-widest text-brand-cream/90">Gestión de Perfumerías</a>
+            <a href="#servicios" onclick="toggleMobileMenu()" class="block text-sm uppercase tracking-widest text-brand-cream/90">Servicios & Tarifas</a>
+            <a href="#ubicacion" onclick="toggleMobileMenu()" class="block text-sm uppercase tracking-widest text-brand-cream/90">Ubicación & Contacto</a>
+            <div class="pt-4 border-t border-white/10 flex flex-col gap-4">
+                <span class="text-[10px] tracking-widest text-brand-muted uppercase">Cartago, Valle del Cauca, Colombia</span>
+                <button onclick="openBookingModal('General'); toggleMobileMenu();" class="text-xs uppercase tracking-widest w-full py-3 bg-brand-cream text-brand-black font-medium">
+                    Reservar / Cotizar
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <section class="relative min-h-screen flex items-center pt-24 pb-16 px-6 lg:px-12 overflow-hidden">
+        <!-- Ambient background gradient -->
+        <div class="absolute inset-0 bg-gradient-to-b from-brand-black via-brand-black/90 to-brand-black z-10 pointer-events-none"></div>
+        <div class="absolute -top-40 -right-40 w-96 h-96 bg-white/5 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-20">
+            <!-- Left Hero Content -->
+            <div class="lg:col-span-7 space-y-8">
+                <div class="inline-flex items-center space-x-3 px-3 py-1 border border-brand-cream/20 rounded-full">
+                    <span class="w-1.5 h-1.5 bg-brand-cream rounded-full"></span>
+                    <span class="text-[11px] uppercase tracking-[0.25em] text-brand-muted">Cartago, Valle • Perfumería & Consultoría</span>
+                </div>
+
+                <h1 class="serif-title text-5xl sm:text-6xl md:text-7xl font-light leading-[1.08] text-brand-cream">
+                    La Curaduría del <br><span class="italic font-normal">Aroma Perfecto</span>
+                </h1>
+
+                <p class="text-brand-muted text-sm sm:text-base font-light leading-relaxed max-w-xl">
+                    Descubre la fragancia idónea para cada momento crucial de tu vida. Asesoramos tu elección personal y potenciamos la gestión digital de perfumerías locales en Colombia.
+                </p>
+
+                <div class="pt-4 flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+                    <a href="#asesoria" class="px-8 py-4 bg-brand-cream text-brand-black text-xs uppercase tracking-[0.2em] font-medium hover:bg-white text-center transition-all shadow-lg hover:shadow-white/10">
+                        Descubre tu Aroma (5.000 COP)
+                    </a>
+                    <a href="#administracion" class="px-8 py-4 border border-brand-cream/30 text-brand-cream text-xs uppercase tracking-[0.2em] font-light hover:border-brand-cream text-center transition-all">
+                        Administra tu Perfumería
+                    </a>
+                </div>
+
+                <div class="pt-8 border-t border-white/10 grid grid-cols-3 gap-6 max-w-md">
+                    <div>
+                        <div class="serif-title text-2xl text-brand-cream font-light">100%</div>
+                        <div class="text-[10px] uppercase tracking-widest text-brand-muted mt-1">Personalizado</div>
+                    </div>
+                    <div>
+                        <div class="serif-title text-2xl text-brand-cream font-light">Valle</div>
+                        <div class="text-[10px] uppercase tracking-widest text-brand-muted mt-1">Sede Cartago</div>
+                    </div>
+                    <div>
+                        <div class="serif-title text-2xl text-brand-cream font-light">24/7</div>
+                        <div class="text-[10px] uppercase tracking-widest text-brand-muted mt-1">Canal Digital</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Hero Visual -->
+            <div class="lg:col-span-5 relative">
+                <div class="relative mx-auto max-w-md lg:max-w-none">
+                    <!-- High quality luxury perfume imagery -->
+                    <div class="img-zoom-container border border-white/15 aspect-[4/5] bg-neutral-900 relative">
+                        <img src="https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?q=80&w=1000&auto=format&fit=crop" 
+                             alt="Luxury Fragrance Bottle CasAroma" 
+                             class="w-full h-full object-cover grayscale contrast-125 brightness-90 hover:grayscale-0 transition-all duration-700"
+                             onerror="this.src='https://placehold.co/600x750/1a1a1a/cccccc?text=CasAroma+Haute+Parfumerie'">
+                    </div>
+                    <!-- Minimal Overlay Card -->
+                    <div class="absolute -bottom-6 -left-6 glass-panel p-6 border border-white/20 max-w-xs hidden sm:block">
+                        <p class="serif-title italic text-lg text-brand-cream">"El perfume es la forma más intensa del recuerdo."</p>
+                        <p class="text-[9px] uppercase tracking-widest text-brand-muted mt-2">— Curaduría CasAroma</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-24 px-6 lg:px-12 border-t border-white/10 bg-gradient-to-b from-brand-black to-neutral-950">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
+                <div class="lg:col-span-4">
+                    <span class="text-[10px] uppercase tracking-[0.3em] text-brand-muted block mb-3">Nuestra Esencia</span>
+                    <h2 class="serif-title text-3xl sm:text-4xl text-brand-cream font-light leading-snug">
+                        Democratizando la alta perfumería y modernizando el comercio local.
+                    </h2>
+                </div>
+
+                <div class="lg:col-span-8 space-y-8 text-brand-cream/80 text-sm font-light leading-relaxed">
+                    <p class="text-base text-brand-cream/90 font-normal">
+                        En la ciudad de Cartago, Valle del Cauca, identificamos un dilema doble: los usuarios enfrentan dificultades para elegir la loción perfecta que se adapte a su personalidad y ocasión, mientras que las perfumerías locales sufren por la falta de herramientas de gestión de inventarios y presencia digital efectiva.
+                    </p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 pt-6 border-t border-white/10">
+                        <div class="space-y-3">
+                            <div class="flex items-center space-x-3 text-brand-cream">
+                                <i data-lucide="sparkles" class="w-4 h-4"></i>
+                                <h3 class="uppercase tracking-widest text-xs font-medium">Asesoría de Elección</h3>
+                            </div>
+                            <p class="text-xs text-brand-muted leading-relaxed">
+                                Guía experta e interactiva para seleccionar notas, familias olfativas y fijación adecuada según el entorno diario, laboral o nocturno.
+                            </p>
+                        </div>
+
+                        <div class="space-y-3">
+                            <div class="flex items-center space-x-3 text-brand-cream">
+                                <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
+                                <h3 class="uppercase tracking-widest text-xs font-medium">Gestión de Perfumerías</h3>
+                            </div>
+                            <p class="text-xs text-brand-muted leading-relaxed">
+                                Software y asesoría integral para digitalizar catálogos, controlar stock y automatizar ventas sin depender únicamente del flujo físico.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="asesoria" class="py-24 px-6 lg:px-12 border-t border-white/10 bg-brand-black">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center max-w-2xl mx-auto mb-16 space-y-4">
+                <span class="text-[10px] uppercase tracking-[0.3em] text-brand-muted">Servicio 01 • 5.000 COP</span>
+                <h2 class="serif-title text-4xl sm:text-5xl text-brand-cream font-light">Asesor Curador de Fragancias</h2>
+                <p class="text-xs tracking-wider uppercase text-brand-muted">Selecciona tus preferencias y obtén una recomendación personalizada al instante</p>
+            </div>
+
+            <!-- Quiz Interactive App -->
+            <div class="max-w-4xl mx-auto glass-panel border border-white/10 p-6 sm:p-10 rounded-none relative">
+                <!-- Step Navigation Progress -->
+                <div class="flex justify-between items-center pb-8 mb-8 border-b border-white/10 text-xs">
+                    <span class="uppercase tracking-widest text-brand-muted">Paso <span id="currentStepNum">1</span> de 3</span>
+                    <div class="flex space-x-2">
+                        <div id="dot1" class="w-8 h-1 bg-brand-cream transition-all"></div>
+                        <div id="dot2" class="w-8 h-1 bg-white/20 transition-all"></div>
+                        <div id="dot3" class="w-8 h-1 bg-white/20 transition-all"></div>
+                    </div>
+                </div>
+
+                <!-- Step 1: Occasion -->
+                <div id="step1" class="space-y-6">
+                    <h3 class="serif-title text-2xl text-brand-cream">¿Para qué ocasión buscas el perfume?</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                        <button onclick="selectOption('occasion', 'Diario / Casual', this)" class="option-btn p-5 border border-white/10 text-left hover:border-brand-cream transition-all group">
+                            <span class="block text-xs uppercase tracking-widest text-brand-muted group-hover:text-brand-cream">Uso Cotidiano</span>
+                            <span class="serif-title text-lg text-brand-cream mt-1 block">Diario / Casual</span>
+                        </button>
+                        <button onclick="selectOption('occasion', 'Trabajo / Oficina', this)" class="option-btn p-5 border border-white/10 text-left hover:border-brand-cream transition-all group">
+                            <span class="block text-xs uppercase tracking-widest text-brand-muted group-hover:text-brand-cream">Profesional</span>
+                            <span class="serif-title text-lg text-brand-cream mt-1 block">Oficina / Trabajo</span>
+                        </button>
+                        <button onclick="selectOption('occasion', 'Cita Romántica', this)" class="option-btn p-5 border border-white/10 text-left hover:border-brand-cream transition-all group">
+                            <span class="block text-xs uppercase tracking-widest text-brand-muted group-hover:text-brand-cream">Intimidad & Encanto</span>
+                            <span class="serif-title text-lg text-brand-cream mt-1 block">Cita Romántica</span>
+                        </button>
+                        <button onclick="selectOption('occasion', 'Evento Formal', this)" class="option-btn p-5 border border-white/10 text-left hover:border-brand-cream transition-all group">
+                            <span class="block text-xs uppercase tracking-widest text-brand-muted group-hover:text-brand-cream">Elegancia Nocturna</span>
+                            <span class="serif-title text-lg text-brand-cream mt-1 block">Gala / Evento Formal</span>
+                        </button>
+                        <button onclick="selectOption('occasion', 'Noche de Fiesta', this)" class="option-btn p-5 border border-white/10 text-left hover:border-brand-cream transition-all group">
+                            <span class="block text-xs uppercase tracking-widest text-brand-muted group-hover:text-brand-cream">Presencia & Proyección</span>
+                            <span class="serif-title text-lg text-brand-cream mt-1 block">Fiesta / Clubbing</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Step 2: Scent Family & Age -->
+                <div id="step2" class="space-y-6 hidden">
+                    <h3 class="serif-title text-2xl text-brand-cream">Familia Olfativa & Rango de Edad</h3>
+                    
+                    <div>
+                        <label class="block text-xs uppercase tracking-widest text-brand-muted mb-3">Familia Olfativa Preferida</label>
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                            <button onclick="selectOption('scent', 'Amaderado / Intenso', this)" class="option-btn-scent p-4 border border-white/10 text-xs text-center hover:border-brand-cream transition-all">
+                                Amaderado / Intenso
+                            </button>
+                            <button onclick="selectOption('scent', 'Cítrico / Físico / Fresco', this)" class="option-btn-scent p-4 border border-white/10 text-xs text-center hover:border-brand-cream transition-all">
+                                Cítrico & Fresco
+                            </button>
+                            <button onclick="selectOption('scent', 'Oriental / Dulce / Ámbar', this)" class="option-btn-scent p-4 border border-white/10 text-xs text-center hover:border-brand-cream transition-all">
+                                Oriental & Dulce
+                            </button>
+                            <button onclick="selectOption('scent', 'Floral / Sutil', this)" class="option-btn-scent p-4 border border-white/10 text-xs text-center hover:border-brand-cream transition-all">
+                                Floral / Sensual
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="pt-4">
+                        <label class="block text-xs uppercase tracking-widest text-brand-muted mb-3">Edad del Usuario</label>
+                        <div class="grid grid-cols-2 gap-4">
+                            <button onclick="selectOption('age', 'Jóvenes (15-25)', this)" class="option-btn-age p-4 border border-white/10 text-xs text-center hover:border-brand-cream transition-all">
+                                Jóvenes (15-25 años)
+                            </button>
+                            <button onclick="selectOption('age', 'Adultos (26+)', this)" class="option-btn-age p-4 border border-white/10 text-xs text-center hover:border-brand-cream transition-all">
+                                Adultos (26+ años)
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3: Result Card -->
+                <div id="step3" class="hidden space-y-8">
+                    <div class="border border-white/20 p-6 sm:p-8 bg-neutral-900/80">
+                        <div class="flex flex-col md:flex-row gap-8 items-center">
+                            <img id="resultImg" src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=600&auto=format&fit=crop" alt="Perfume recomendado" class="w-40 h-48 object-cover grayscale border border-white/10">
+                            
+                            <div class="space-y-3 flex-1 text-center md:text-left">
+                                <span class="text-[10px] uppercase tracking-[0.3em] text-brand-muted">Recomendación Curada CasAroma</span>
+                                <h4 id="resultTitle" class="serif-title text-3xl text-brand-cream">Bleu Sublime Eau de Parfum</h4>
+                                <p id="resultDesc" class="text-xs text-brand-muted leading-relaxed">
+                                    Una fragancia perfectamente balanceada con notas de madera noble, bergamota fresca y una estela duradera ideal para la ocasión elegida.
+                                </p>
+                                
+                                <div class="pt-2 flex flex-wrap gap-4 text-[11px] justify-center md:justify-start">
+                                    <span class="px-3 py-1 bg-white/5 border border-white/10 text-brand-cream">Fijación: 8-10 Horas</span>
+                                    <span class="px-3 py-1 bg-white/5 border border-white/10 text-brand-cream">Proyección: Moderada-Alta</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-white/10">
+                        <div>
+                            <span class="block text-[10px] uppercase tracking-widest text-brand-muted">Costo Asesoría Completa</span>
+                            <span class="serif-title text-2xl text-brand-cream">$5.000 COP</span>
+                        </div>
+                        <div class="flex gap-4 w-full sm:w-auto">
+                            <button onclick="resetQuiz()" class="px-6 py-3 border border-white/20 text-xs uppercase tracking-widest text-brand-cream hover:border-white w-1/2 sm:w-auto">
+                                Reiniciar
+                            </button>
+                            <button onclick="openBookingModal('Asesoría de Perfume - 5.000 COP')" class="px-8 py-3 bg-brand-cream text-brand-black text-xs uppercase tracking-widest font-medium hover:bg-white w-1/2 sm:w-auto">
+                                Agendar Muestra
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation Buttons inside quiz -->
+                <div id="quizNav" class="mt-8 pt-6 border-t border-white/10 flex justify-between items-center">
+                    <button id="prevBtn" onclick="navigateQuiz(-1)" class="text-xs uppercase tracking-widest text-brand-muted hover:text-white disabled:opacity-30" disabled>
+                        ← Anterior
+                    </button>
+                    <button id="nextBtn" onclick="navigateQuiz(1)" class="text-xs uppercase tracking-widest bg-brand-cream text-brand-black px-6 py-2.5 font-medium hover:bg-white transition-all">
+                        Siguiente →
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="administracion" class="py-24 px-6 lg:px-12 border-t border-white/10 bg-neutral-950">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+                
+                <div class="lg:col-span-5 space-y-8">
+                    <span class="text-[10px] uppercase tracking-[0.3em] text-brand-muted">Servicio 02 • B2B Perfumerías</span>
+                    <h2 class="serif-title text-4xl sm:text-5xl text-brand-cream font-light leading-tight">
+                        Administración & Digitalización de Locales
+                    </h2>
+                    <p class="text-xs text-brand-muted leading-relaxed">
+                        Moderniza tu tienda de perfumes en Cartago o Colombia. Pasa del registro manual en libreta a un sistema ágil de inventario, catálogo en línea y asesoría directa de ventas.
+                    </p>
+
+                    <ul class="space-y-4 text-xs tracking-wider text-brand-cream/90">
+                        <li class="flex items-center space-x-3">
+                            <i data-lucide="check" class="w-4 h-4 text-brand-cream"></i>
+                            <span>Control en tiempo real de fragancias y marcas.</span>
+                        </li>
+                        <li class="flex items-center space-x-3">
+                            <i data-lucide="check" class="w-4 h-4 text-brand-cream"></i>
+                            <span>Vitrina digital personalizada para venta por WhatsApp.</span>
+                        </li>
+                        <li class="flex items-center space-x-3">
+                            <i data-lucide="check" class="w-4 h-4 text-brand-cream"></i>
+                            <span>Capacitación en técnicas de recomendación para vendedores.</span>
+                        </li>
+                    </ul>
+
+                    <!-- ROI Simulator -->
+                    <div class="p-6 glass-panel border border-white/10 space-y-4">
+                        <h4 class="serif-title text-xl text-brand-cream">Simulador de Impacto Comercial</h4>
+                        
+                        <div>
+                            <div class="flex justify-between text-[11px] text-brand-muted mb-2">
+                                <span>Ventas mensuales actuales:</span>
+                                <span id="currentSalesVal" class="text-brand-cream font-medium">$3.000.000 COP</span>
+                            </div>
+                            <input type="range" id="salesRange" min="1000000" max="15000000" step="500000" value="3000000" oninput="updateROISimulator()" class="w-full accent-brand-cream bg-white/10 h-1">
+                        </div>
+
+                        <div class="pt-3 border-t border-white/10 flex justify-between items-center">
+                            <div>
+                                <span class="text-[9px] uppercase tracking-widest text-brand-muted block">Proyección con CasAroma</span>
+                                <span id="projectedSalesVal" class="serif-title text-2xl text-brand-cream font-light">$4.200.000 COP</span>
+                            </div>
+                            <span class="text-xs text-emerald-400 bg-emerald-950/50 border border-emerald-800 px-2.5 py-1 uppercase tracking-wider">+40% Eficiencia</span>
+                        </div>
+                    </div>
+
+                    <div class="pt-2">
+                        <button onclick="openBookingModal('Administración de Locales - 500.000 COP')" class="w-full py-4 bg-brand-cream text-brand-black text-xs uppercase tracking-[0.2em] font-medium hover:bg-white transition-all text-center">
+                            Solicitar Plan de Gestión ($500.000 COP)
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Live Dashboard Visual Mockup -->
+                <div class="lg:col-span-7">
+                    <div class="border border-white/15 p-6 glass-panel space-y-6">
+                        <!-- Dashboard Top Nav -->
+                        <div class="flex justify-between items-center border-b border-white/10 pb-4">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-3 h-3 rounded-full bg-red-500/80"></div>
+                                <div class="w-3 h-3 rounded-full bg-yellow-500/80"></div>
+                                <div class="w-3 h-3 rounded-full bg-green-500/80"></div>
+                                <span class="text-[10px] uppercase tracking-widest text-brand-muted ml-2">CasAroma Management System v2.4</span>
+                            </div>
+                            <span class="text-[10px] text-brand-muted">Perfumería Cartago Centro</span>
+                        </div>
+
+                        <!-- Stats Row -->
+                        <div class="grid grid-cols-3 gap-4">
+                            <div class="p-4 bg-white/5 border border-white/5">
+                                <span class="text-[9px] uppercase text-brand-muted">Frascos en Stock</span>
+                                <div class="serif-title text-2xl text-brand-cream mt-1">142 Unid.</div>
+                            </div>
+                            <div class="p-4 bg-white/5 border border-white/5">
+                                <span class="text-[9px] uppercase text-brand-muted">Top Recomendado</span>
+                                <div class="serif-title text-lg text-brand-cream mt-1 truncate">Sauvage Elixir</div>
+                            </div>
+                            <div class="p-4 bg-white/5 border border-white/5">
+                                <span class="text-[9px] uppercase text-brand-muted">Ventas Digitales</span>
+                                <div class="serif-title text-2xl text-brand-cream mt-1">+28%</div>
+                            </div>
+                        </div>
+
+                        <!-- Inventory Sample Table -->
+                        <div class="border border-white/10 overflow-hidden">
+                            <div class="p-3 bg-white/5 border-b border-white/10 text-[10px] uppercase tracking-widest text-brand-muted flex justify-between">
+                                <span>Producto</span>
+                                <span>Categoría</span>
+                                <span>Estado</span>
+                            </div>
+                            <div class="divide-y divide-white/5 text-xs">
+                                <div class="p-3 flex justify-between items-center">
+                                    <span class="text-brand-cream">Tom Ford Oud Wood</span>
+                                    <span class="text-brand-muted text-[11px]">Amaderado</span>
+                                    <span class="text-emerald-400 text-[10px] uppercase">Disponible (8)</span>
+                                </div>
+                                <div class="p-3 flex justify-between items-center">
+                                    <span class="text-brand-cream">Chanel Coco Mademoiselle</span>
+                                    <span class="text-brand-muted text-[11px]">Floral / Oriental</span>
+                                    <span class="text-emerald-400 text-[10px] uppercase">Disponible (12)</span>
+                                </div>
+                                <div class="p-3 flex justify-between items-center">
+                                    <span class="text-brand-cream">Creed Aventus EDP</span>
+                                    <span class="text-brand-muted text-[11px]">Chypre Cítrico</span>
+                                    <span class="text-amber-400 text-[10px] uppercase">Poco Stock (2)</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Graph Illustration -->
+                        <div class="p-4 bg-white/5 border border-white/5 space-y-2">
+                            <span class="text-[9px] uppercase tracking-widest text-brand-muted">Crecimiento de Clientes Fidelizados</span>
+                            <div class="h-20 flex items-end justify-between gap-2 pt-2">
+                                <div class="w-full bg-white/10 h-[30%] hover:bg-brand-cream transition-all"></div>
+                                <div class="w-full bg-white/10 h-[45%] hover:bg-brand-cream transition-all"></div>
+                                <div class="w-full bg-white/10 h-[60%] hover:bg-brand-cream transition-all"></div>
+                                <div class="w-full bg-white/10 h-[75%] hover:bg-brand-cream transition-all"></div>
+                                <div class="w-full bg-brand-cream h-[90%]"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section id="servicios" class="py-24 px-6 lg:px-12 border-t border-white/10 bg-brand-black">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center max-w-xl mx-auto mb-16 space-y-3">
+                <span class="text-[10px] uppercase tracking-[0.3em] text-brand-muted">Propuesta de Valor</span>
+                <h2 class="serif-title text-4xl sm:text-5xl text-brand-cream font-light">Portafolio de Servicios</h2>
+            </div>
+
+            <!-- Table Minimalist Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+                <!-- Service Card 1 -->
+                <div class="border border-white/15 p-8 sm:p-10 flex flex-col justify-between space-y-8 bg-neutral-900/40 hover:border-brand-cream transition-all">
+                    <div class="space-y-4">
+                        <span class="text-[10px] uppercase tracking-widest text-brand-muted">Servicio a Personas</span>
+                        <h3 class="serif-title text-3xl text-brand-cream">Asesoría de Perfumes</h3>
+                        <p class="text-xs text-brand-muted leading-relaxed">
+                            Asesoramos qué perfume te queda mejor dependiendo de la ocasión en la que lo vayas a utilizar, tu química corporal y tus gustos olfativos.
+                        </p>
+                        <ul class="pt-4 border-t border-white/10 space-y-2 text-xs text-brand-cream/80">
+                            <li>• Diagnóstico olfativo personalizado</li>
+                            <li>• Muestreo de notas y familias</li>
+                            <li>• Recomendación para 3 ocasiones clave</li>
+                        </ul>
+                    </div>
+
+                    <div class="pt-6 border-t border-white/10 flex items-end justify-between">
+                        <div>
+                            <span class="text-[9px] uppercase tracking-widest text-brand-muted block">Inversión</span>
+                            <span class="serif-title text-3xl text-brand-cream">5.000$ <span class="text-xs text-brand-muted font-sans">COP</span></span>
+                        </div>
+                        <button onclick="openBookingModal('Asesoría de Perfumes - 5.000 COP')" class="px-5 py-2.5 bg-brand-cream text-brand-black text-xs uppercase tracking-widest hover:bg-white transition-all font-medium">
+                            Solicitar
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Service Card 2 -->
+                <div class="border border-white/15 p-8 sm:p-10 flex flex-col justify-between space-y-8 bg-neutral-900/40 hover:border-brand-cream transition-all">
+                    <div class="space-y-4">
+                        <span class="text-[10px] uppercase tracking-widest text-brand-muted">Servicio a Emprendedores</span>
+                        <h3 class="serif-title text-3xl text-brand-cream">Administración de Perfumerías</h3>
+                        <p class="text-xs text-brand-muted leading-relaxed">
+                            Administramos tu negocio de perfumería, digitalizamos tu catálogo y asesoramos a tus clientes para maximizar tus ventas mensuales.
+                        </p>
+                        <ul class="pt-4 border-t border-white/10 space-y-2 text-xs text-brand-cream/80">
+                            <li>• Organización integral de inventarios</li>
+                            <li>• Estrategia digital de ventas locales</li>
+                            <li>• Soporte comercial continuo</li>
+                        </ul>
+                    </div>
+
+                    <div class="pt-6 border-t border-white/10 flex items-end justify-between">
+                        <div>
+                            <span class="text-[9px] uppercase tracking-widest text-brand-muted block">Inversión Mensual</span>
+                            <span class="serif-title text-3xl text-brand-cream">500.000$ <span class="text-xs text-brand-muted font-sans">COP</span></span>
+                        </div>
+                        <button onclick="openBookingModal('Administración de Perfumerías - 500.000 COP')" class="px-5 py-2.5 bg-brand-cream text-brand-black text-xs uppercase tracking-widest hover:bg-white transition-all font-medium">
+                            Contratar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="ubicacion" class="py-24 px-6 lg:px-12 border-t border-white/10 bg-neutral-950">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                
+                <!-- Text Details -->
+                <div class="lg:col-span-5 space-y-6">
+                    <span class="text-[10px] uppercase tracking-[0.3em] text-brand-muted">Ubicación Estratégica</span>
+                    <h2 class="serif-title text-4xl text-brand-cream font-light">Sede Principal Cartago</h2>
+                    
+                    <p class="text-xs text-brand-muted leading-relaxed">
+                        Ubicados estratégicamente en un punto central de la ciudad para garantizar fácil acceso presencial, además de nuestra atención digital integral en todo Colombia.
+                    </p>
+
+                    <div class="space-y-4 pt-4 border-t border-white/10 text-xs">
+                        <div class="flex items-start space-x-3">
+                            <i data-lucide="map-pin" class="w-4 h-4 text-brand-cream shrink-0 mt-0.5"></i>
+                            <div>
+                                <span class="block text-brand-cream font-medium">Dirección Física</span>
+                                <span class="text-brand-muted">Calle 7 #5-83, Barrio Guadalupe</span>
+                                <span class="block text-brand-muted">Cartago, Valle del Cauca, Colombia</span>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start space-x-3">
+                            <i data-lucide="clock" class="w-4 h-4 text-brand-cream shrink-0 mt-0.5"></i>
+                            <div>
+                                <span class="block text-brand-cream font-medium">Horario de Atención</span>
+                                <span class="text-brand-muted">Lunes a Sábado: 9:00 AM - 7:00 PM</span>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start space-x-3">
+                            <i data-lucide="globe" class="w-4 h-4 text-brand-cream shrink-0 mt-0.5"></i>
+                            <div>
+                                <span class="block text-brand-cream font-medium">Atención Virtual</span>
+                                <span class="text-brand-muted">Cobertura a nivel regional y nacional</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Minimal Interactive Map Visual Simulation -->
+                <div class="lg:col-span-7">
+                    <div class="border border-white/15 p-2 bg-neutral-900 relative aspect-video flex flex-col justify-between overflow-hidden">
+                        <!-- Simulated Map Grid -->
+                        <div class="absolute inset-0 opacity-20 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]"></div>
+                        
+                        <!-- Map Location Pin Pointer -->
+                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center z-10">
+                            <div class="px-3 py-1.5 glass-panel text-[10px] uppercase tracking-widest text-brand-cream border border-white/20 whitespace-nowrap mb-2 shadow-2xl">
+                                CasAroma • Barrio Guadalupe
+                            </div>
+                            <div class="w-4 h-4 bg-brand-cream rounded-full border-2 border-brand-black animate-ping"></div>
+                            <div class="w-3 h-3 bg-brand-cream rounded-full border-2 border-brand-black -mt-3"></div>
+                        </div>
+
+                        <!-- Map Header Controls -->
+                        <div class="relative z-10 flex justify-between items-center p-4">
+                            <span class="text-[9px] uppercase tracking-widest text-brand-muted bg-brand-black/80 px-2.5 py-1 border border-white/10">Croquis Geográfico</span>
+                            <span class="text-[9px] uppercase tracking-widest text-brand-cream bg-brand-black/80 px-2.5 py-1 border border-white/10">Valle del Cauca</span>
+                        </div>
+
+                        <!-- Map Footer Landmark Info -->
+                        <div class="relative z-10 p-4 glass-panel border-t border-white/10 flex justify-between items-center text-[10px] text-brand-muted">
+                            <span>Eje Central Cartago • Cl. 7 #5-83</span>
+                            <a href="https://maps.google.com" target="_blank" rel="noopener" class="underline uppercase hover:text-white">Ver en Google Maps</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section class="py-24 px-6 lg:px-12 border-t border-white/10 bg-brand-black">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center max-w-xl mx-auto mb-16 space-y-3">
+                <span class="text-[10px] uppercase tracking-[0.3em] text-brand-muted">Validación de Comunidad</span>
+                <h2 class="serif-title text-4xl sm:text-5xl text-brand-cream font-light">Testimonios Locales</h2>
+                <p class="text-xs text-brand-muted">Opiniones de usuarios reales consultados sobre nuestra propuesta en Cartago</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+                <!-- Testimonial 1 -->
+                <div class="p-8 border border-white/10 glass-panel space-y-4">
+                    <div class="flex text-amber-300">
+                        <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
+                        <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
+                        <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
+                        <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
+                        <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
+                    </div>
+                    <p class="serif-title italic text-lg text-brand-cream">"Totalmente necesario. Siempre me daba perezar ir de local en local buscando fragancias sin asesoría clara."</p>
+                    <div>
+                        <span class="block text-xs uppercase tracking-widest text-brand-cream">Juan David Murillo</span>
+                        <span class="text-[10px] text-brand-muted">Usuario en Cartago • <span class="text-emerald-400">Sí lo utilizaría</span></span>
+                    </div>
+                </div>
+
+                <!-- Testimonial 2 -->
+                <div class="p-8 border border-white/10 glass-panel space-y-4">
+                    <div class="flex text-amber-300">
+                        <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
+                        <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
+                        <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
+                        <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
+                        <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
+                    </div>
+                    <p class="serif-title italic text-lg text-brand-cream">"El servicio de recomendación me ayudó a elegir la fragancia exacta para mi trabajo sin malgastar dinero."</p>
+                    <div>
+                        <span class="block text-xs uppercase tracking-widest text-brand-cream">Santiago Gil</span>
+                        <span class="text-[10px] text-brand-muted">Usuario en Cartago • <span class="text-emerald-400">Sí lo utilizaría</span></span>
+                    </div>
+                </div>
+
+                <!-- Testimonial 3 -->
+                <div class="p-8 border border-white/10 glass-panel space-y-4">
+                    <div class="flex text-amber-300">
+                        <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
+                        <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
+                        <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
+                        <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
+                        <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
+                    </div>
+                    <p class="serif-title italic text-lg text-brand-cream">"Excelente para los locales de perfumería que necesitan orden en sus inventarios y presencia en internet."</p>
+                    <div>
+                        <span class="block text-xs uppercase tracking-widest text-brand-cream">Yeray Home</span>
+                        <span class="text-[10px] text-brand-muted">Empresario Local • <span class="text-emerald-400">Sí lo utilizaría</span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="border-t border-white/10 py-16 px-6 lg:px-12 bg-neutral-950 text-xs text-brand-muted">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-10">
+            <div class="space-y-4 md:col-span-2">
+                <span class="serif-title text-2xl tracking-[0.2em] text-brand-cream block">CASAROMA</span>
+                <p class="text-xs max-w-sm leading-relaxed">
+                    Plataforma especializada en curaduría de perfume y solución de administración integral para perfumerías locales.
+                </p>
+                <p class="text-[10px] uppercase tracking-widest">Cartago, Valle del Cauca, Colombia</p>
+            </div>
+
+            <div class="space-y-3">
+                <span class="uppercase tracking-widest text-brand-cream block text-[10px]">Enlaces Rápidos</span>
+                <ul class="space-y-2">
+                    <li><a href="#asesoria" class="hover:text-white transition-colors">Asesoría ($5.000 COP)</a></li>
+                    <li><a href="#administracion" class="hover:text-white transition-colors">Gestión ($500.000 COP)</a></li>
+                    <li><a href="#ubicacion" class="hover:text-white transition-colors">Ubicación Calle 7</a></li>
+                </ul>
+            </div>
+
+            <div class="space-y-3">
+                <span class="uppercase tracking-widest text-brand-cream block text-[10px]">Atención & Contacto</span>
+                <p>Calle 7 #5-83, B. Guadalupe</p>
+                <p>Cartago, Valle del Cauca</p>
+                <p class="text-brand-cream">contacto@casaroma.co</p>
+            </div>
+        </div>
+
+        <div class="max-w-7xl mx-auto mt-12 pt-8 border-t border-white/5 flex flex-col sm:flex-row justify-between items-center text-[10px] uppercase tracking-widest">
+            <span>&copy; 2026 CasAroma Haute Parfumerie. Todos los derechos reservados.</span>
+            <span class="mt-2 sm:mt-0">Diseño Minimalista • Elegancia Olfativa</span>
+        </div>
+    </footer>
+
+    <div id="bookingModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+        <div class="glass-panel-light max-w-md w-full p-8 text-brand-black relative rounded-none shadow-2xl">
+            <button onclick="closeBookingModal()" class="absolute top-6 right-6 text-brand-black/60 hover:text-brand-black">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+
+            <div class="space-y-2 mb-6">
+                <span class="text-[9px] uppercase tracking-[0.25em] text-neutral-500 font-semibold block">Reservar / Agendar</span>
+                <h3 class="serif-title text-3xl font-light text-brand-black" id="modalServiceTitle">Servicio CasAroma</h3>
+                <p class="text-xs text-neutral-600">Completa tus datos y nos pondremos en contacto de inmediato.</p>
+            </div>
+
+            <form id="bookingForm" onsubmit="handleFormSubmit(event)" class="space-y-4 text-xs">
+                <div>
+                    <label class="block uppercase tracking-wider text-[10px] text-neutral-600 mb-1">Nombre Completo</label>
+                    <input type="text" required placeholder="Ej. Juan David Murillo" class="w-full p-3 bg-neutral-100 border border-neutral-300 focus:outline-none focus:border-brand-black transition-all">
+                </div>
+
+                <div>
+                    <label class="block uppercase tracking-wider text-[10px] text-neutral-600 mb-1">Teléfono / WhatsApp</label>
+                    <input type="tel" required placeholder="+57 300 000 0000" class="w-full p-3 bg-neutral-100 border border-neutral-300 focus:outline-none focus:border-brand-black transition-all">
+                </div>
+
+                <div>
+                    <label class="block uppercase tracking-wider text-[10px] text-neutral-600 mb-1">Ciudad / Barrio</label>
+                    <input type="text" value="Cartago, Valle" class="w-full p-3 bg-neutral-100 border border-neutral-300 focus:outline-none focus:border-brand-black transition-all">
+                </div>
+
+                <div>
+                    <label class="block uppercase tracking-wider text-[10px] text-neutral-600 mb-1">Mensaje Adicional</label>
+                    <textarea rows="3" placeholder="Indica detalles de tu disponibilidad u ocasión preferida" class="w-full p-3 bg-neutral-100 border border-neutral-300 focus:outline-none focus:border-brand-black transition-all"></textarea>
+                </div>
+
+                <button type="submit" class="w-full py-4 bg-brand-black text-brand-cream text-xs uppercase tracking-[0.2em] font-medium hover:bg-neutral-800 transition-all mt-4">
+                    Confirmar Solicitud
+                </button>
+            </form>
+
+            <div id="modalSuccess" class="hidden text-center py-8 space-y-3">
+                <i data-lucide="check-circle" class="w-12 h-12 text-black mx-auto"></i>
+                <h4 class="serif-title text-2xl font-light">¡Solicitud Recibida!</h4>
+                <p class="text-xs text-neutral-600">Nos comunicaremos contigo a la brevedad para coordinar tu servicio.</p>
+                <button onclick="closeBookingModal()" class="mt-4 px-6 py-2.5 bg-brand-black text-white text-xs uppercase tracking-widest">
+                    Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Quiz Logic State
+        let currentStep = 1;
+        let quizAnswers = {
+            occasion: '',
+            scent: '',
+            age: ''
+        };
+
+        const perfumesData = [
+            {
+                name: "Bleu Absolute EDP",
+                desc: "Notas amaderadas y cítricas de alta intensidad. Excelente para eventos de noche o reuniones ejecutivas.",
+                img: "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?q=80&w=600&auto=format&fit=crop"
+            },
+            {
+                name: "Aroma Elixir Velvet",
+                desc: "Esencia oriental dulce con toques de ámbar y vainilla negra. Ideal para citas románticas e intimidad.",
+                img: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=600&auto=format&fit=crop"
+            },
+            {
+                name: "Citrus Mist Fresh",
+                desc: "Notas frescas y vibrantes de bergamota y mandarina. La elección predilecta para el día a día y trabajo.",
+                img: "https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?q=80&w=600&auto=format&fit=crop"
+            }
+        ];
+
+        function selectOption(category, value, elem) {
+            quizAnswers[category] = value;
+            
+            // Highlight selected button
+            const parent = elem.parentElement;
+            const buttons = parent.querySelectorAll('button');
+            buttons.forEach(b => b.classList.remove('border-brand-cream', 'bg-white/10'));
+            elem.classList.add('border-brand-cream', 'bg-white/10');
+        }
+
+        function navigateQuiz(direction) {
+            if (direction === 1 && currentStep < 3) {
+                currentStep++;
+            } else if (direction === -1 && currentStep > 1) {
+                currentStep--;
+            }
+
+            updateQuizUI();
+        }
+
+        function updateQuizUI() {
+            document.getElementById('currentStepNum').innerText = currentStep;
+            
+            // Hide all steps
+            document.getElementById('step1').classList.add('hidden');
+            document.getElementById('step2').classList.add('hidden');
+            document.getElementById('step3').classList.add('hidden');
+
+            // Show active step
+            document.getElementById(`step${currentStep}`).classList.remove('hidden');
+
+            // Progress dots
+            document.getElementById('dot1').className = currentStep >= 1 ? 'w-8 h-1 bg-brand-cream transition-all' : 'w-8 h-1 bg-white/20 transition-all';
+            document.getElementById('dot2').className = currentStep >= 2 ? 'w-8 h-1 bg-brand-cream transition-all' : 'w-8 h-1 bg-white/20 transition-all';
+            document.getElementById('dot3').className = currentStep >= 3 ? 'w-8 h-1 bg-brand-cream transition-all' : 'w-8 h-1 bg-white/20 transition-all';
+
+            // Buttons state
+            document.getElementById('prevBtn').disabled = (currentStep === 1);
+            
+            if (currentStep === 3) {
+                document.getElementById('quizNav').classList.add('hidden');
+                calculateResult();
+            } else {
+                document.getElementById('quizNav').classList.remove('hidden');
+            }
+        }
+
+        function calculateResult() {
+            // Select random recommendation based on quiz for demo
+            const selectedPerfume = perfumesData[Math.floor(Math.random() * perfumesData.length)];
+            
+            document.getElementById('resultTitle').innerText = selectedPerfume.name;
+            document.getElementById('resultDesc').innerText = `${selectedPerfume.desc} (Recomendado para: ${quizAnswers.occasion || 'Diario'} / ${quizAnswers.scent || 'Gusto Personal'}).`;
+            document.getElementById('resultImg').src = selectedPerfume.img;
+        }
+
+        function resetQuiz() {
+            currentStep = 1;
+            quizAnswers = { occasion: '', scent: '', age: '' };
+            updateQuizUI();
+        }
+
+        // ROI Simulator
+        function updateROISimulator() {
+            const val = parseInt(document.getElementById('salesRange').value);
+            const formattedCurrent = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(val);
+            const formattedProjected = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(val * 1.4);
+
+            document.getElementById('currentSalesVal').innerText = formattedCurrent + ' COP';
+            document.getElementById('projectedSalesVal').innerText = formattedProjected + ' COP';
+        }
+
+        // Mobile Menu
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Booking Modal
+        function openBookingModal(serviceName) {
+            document.getElementById('modalServiceTitle').innerText = serviceName || 'Servicio CasAroma';
+            document.getElementById('bookingModal').classList.remove('hidden');
+            document.getElementById('bookingForm').classList.remove('hidden');
+            document.getElementById('modalSuccess').classList.add('hidden');
+        }
+
+        function closeBookingModal() {
+            document.getElementById('bookingModal').classList.add('hidden');
+        }
+
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            document.getElementById('bookingForm').classList.add('hidden');
+            document.getElementById('modalSuccess').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
